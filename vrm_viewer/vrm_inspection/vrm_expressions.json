@@ -1,0 +1,226 @@
+{
+  "neutral:Neutral": {
+    "name": "Neutral",
+    "presetName": "neutral",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 0,
+        "morph_name": "Fcl_ALL_Neutral",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "a:A": {
+    "name": "A",
+    "presetName": "a",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 39,
+        "morph_name": "Fcl_MTH_A",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "i:I": {
+    "name": "I",
+    "presetName": "i",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 40,
+        "morph_name": "Fcl_MTH_I",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "u:U": {
+    "name": "U",
+    "presetName": "u",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 41,
+        "morph_name": "Fcl_MTH_U",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "e:E": {
+    "name": "E",
+    "presetName": "e",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 42,
+        "morph_name": "Fcl_MTH_E",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "o:O": {
+    "name": "O",
+    "presetName": "o",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 43,
+        "morph_name": "Fcl_MTH_O",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "blink:Blink": {
+    "name": "Blink",
+    "presetName": "blink",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 13,
+        "morph_name": "Fcl_EYE_Close",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "blink_l:Blink_L": {
+    "name": "Blink_L",
+    "presetName": "blink_l",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 15,
+        "morph_name": "Fcl_EYE_Close_L",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "blink_r:Blink_R": {
+    "name": "Blink_R",
+    "presetName": "blink_r",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 14,
+        "morph_name": "Fcl_EYE_Close_R",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "angry:Angry": {
+    "name": "Angry",
+    "presetName": "angry",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 1,
+        "morph_name": "Fcl_ALL_Angry",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "fun:Fun": {
+    "name": "Fun",
+    "presetName": "fun",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 2,
+        "morph_name": "Fcl_ALL_Fun",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "joy:Joy": {
+    "name": "Joy",
+    "presetName": "joy",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 3,
+        "morph_name": "Fcl_ALL_Joy",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "sorrow:Sorrow": {
+    "name": "Sorrow",
+    "presetName": "sorrow",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 4,
+        "morph_name": "Fcl_ALL_Sorrow",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  },
+  "unknown:Surprised": {
+    "name": "Surprised",
+    "presetName": "unknown",
+    "isBinary": false,
+    "binds": [
+      {
+        "mesh_index": 0,
+        "mesh_name": "Face (merged).baked",
+        "morph_index": 5,
+        "morph_name": "Fcl_ALL_Surprised",
+        "weight_percent": 100,
+        "weight_normalized": 1.0
+      }
+    ],
+    "materialValues": []
+  }
+}

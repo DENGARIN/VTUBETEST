@@ -1,0 +1,58 @@
+category	mesh_index	mesh_name	morph_index	morph_name	used_by
+whole_face_expressions	0	Face (merged).baked	0	Fcl_ALL_Neutral	neutral:Neutral
+whole_face_expressions	0	Face (merged).baked	1	Fcl_ALL_Angry	angry:Angry
+whole_face_expressions	0	Face (merged).baked	2	Fcl_ALL_Fun	fun:Fun
+whole_face_expressions	0	Face (merged).baked	3	Fcl_ALL_Joy	joy:Joy
+whole_face_expressions	0	Face (merged).baked	4	Fcl_ALL_Sorrow	sorrow:Sorrow
+whole_face_expressions	0	Face (merged).baked	5	Fcl_ALL_Surprised	unknown:Surprised
+eyebrows	0	Face (merged).baked	6	Fcl_BRW_Angry	(not bound to VRM expression)
+eyebrows	0	Face (merged).baked	7	Fcl_BRW_Fun	(not bound to VRM expression)
+eyebrows	0	Face (merged).baked	8	Fcl_BRW_Joy	(not bound to VRM expression)
+eyebrows	0	Face (merged).baked	9	Fcl_BRW_Sorrow	(not bound to VRM expression)
+eyebrows	0	Face (merged).baked	10	Fcl_BRW_Surprised	(not bound to VRM expression)
+eyes	0	Face (merged).baked	11	Fcl_EYE_Natural	(not bound to VRM expression)
+eyes	0	Face (merged).baked	12	Fcl_EYE_Angry	(not bound to VRM expression)
+eyes	0	Face (merged).baked	13	Fcl_EYE_Close	blink:Blink
+eyes	0	Face (merged).baked	14	Fcl_EYE_Close_R	blink_r:Blink_R
+eyes	0	Face (merged).baked	15	Fcl_EYE_Close_L	blink_l:Blink_L
+eyes	0	Face (merged).baked	16	Fcl_EYE_Fun	(not bound to VRM expression)
+eyes	0	Face (merged).baked	17	Fcl_EYE_Joy	(not bound to VRM expression)
+eyes	0	Face (merged).baked	18	Fcl_EYE_Joy_R	(not bound to VRM expression)
+eyes	0	Face (merged).baked	19	Fcl_EYE_Joy_L	(not bound to VRM expression)
+eyes	0	Face (merged).baked	20	Fcl_EYE_Sorrow	(not bound to VRM expression)
+eyes	0	Face (merged).baked	21	Fcl_EYE_Surprised	(not bound to VRM expression)
+eyes	0	Face (merged).baked	22	Fcl_EYE_Spread	(not bound to VRM expression)
+eyes	0	Face (merged).baked	23	Fcl_EYE_Iris_Hide	(not bound to VRM expression)
+eyes	0	Face (merged).baked	24	Fcl_EYE_Highlight_Hide	(not bound to VRM expression)
+mouth	0	Face (merged).baked	25	Fcl_MTH_Close	(not bound to VRM expression)
+mouth	0	Face (merged).baked	26	Fcl_MTH_Up	(not bound to VRM expression)
+mouth	0	Face (merged).baked	27	Fcl_MTH_Down	(not bound to VRM expression)
+mouth	0	Face (merged).baked	28	Fcl_MTH_Angry	(not bound to VRM expression)
+mouth	0	Face (merged).baked	29	Fcl_MTH_Small	(not bound to VRM expression)
+mouth	0	Face (merged).baked	30	Fcl_MTH_Large	(not bound to VRM expression)
+mouth	0	Face (merged).baked	31	Fcl_MTH_Neutral	(not bound to VRM expression)
+mouth	0	Face (merged).baked	32	Fcl_MTH_Fun	(not bound to VRM expression)
+mouth	0	Face (merged).baked	33	Fcl_MTH_Joy	(not bound to VRM expression)
+mouth	0	Face (merged).baked	34	Fcl_MTH_Sorrow	(not bound to VRM expression)
+mouth	0	Face (merged).baked	35	Fcl_MTH_Surprised	(not bound to VRM expression)
+mouth	0	Face (merged).baked	36	Fcl_MTH_SkinFung	(not bound to VRM expression)
+mouth	0	Face (merged).baked	37	Fcl_MTH_SkinFung_R	(not bound to VRM expression)
+mouth	0	Face (merged).baked	38	Fcl_MTH_SkinFung_L	(not bound to VRM expression)
+mouth	0	Face (merged).baked	39	Fcl_MTH_A	a:A
+mouth	0	Face (merged).baked	40	Fcl_MTH_I	i:I
+mouth	0	Face (merged).baked	41	Fcl_MTH_U	u:U
+mouth	0	Face (merged).baked	42	Fcl_MTH_E	e:E
+mouth	0	Face (merged).baked	43	Fcl_MTH_O	o:O
+teeth_or_mouth_interior	0	Face (merged).baked	44	Fcl_HA_Hide	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	45	Fcl_HA_Fung1	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	46	Fcl_HA_Fung1_Low	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	47	Fcl_HA_Fung1_Up	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	48	Fcl_HA_Fung2	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	49	Fcl_HA_Fung2_Low	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	50	Fcl_HA_Fung2_Up	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	51	Fcl_HA_Fung3	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	52	Fcl_HA_Fung3_Up	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	53	Fcl_HA_Fung3_Low	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	54	Fcl_HA_Short	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	55	Fcl_HA_Short_Up	(not bound to VRM expression)
+teeth_or_mouth_interior	0	Face (merged).baked	56	Fcl_HA_Short_Low	(not bound to VRM expression)

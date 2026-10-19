@@ -1,0 +1,657 @@
+{
+  "source_file": "BaseTest.vrm",
+  "gltf_version": "2.0",
+  "vrm_version": "VRM 0.x",
+  "expression_count": 14,
+  "expressions": {
+    "neutral:Neutral": {
+      "category": "preset",
+      "name": "Neutral",
+      "presetName": "neutral",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 0,
+          "morph_name": "Fcl_ALL_Neutral",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "a:A": {
+      "category": "preset",
+      "name": "A",
+      "presetName": "a",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 39,
+          "morph_name": "Fcl_MTH_A",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "i:I": {
+      "category": "preset",
+      "name": "I",
+      "presetName": "i",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 40,
+          "morph_name": "Fcl_MTH_I",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "u:U": {
+      "category": "preset",
+      "name": "U",
+      "presetName": "u",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 41,
+          "morph_name": "Fcl_MTH_U",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "e:E": {
+      "category": "preset",
+      "name": "E",
+      "presetName": "e",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 42,
+          "morph_name": "Fcl_MTH_E",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "o:O": {
+      "category": "preset",
+      "name": "O",
+      "presetName": "o",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 43,
+          "morph_name": "Fcl_MTH_O",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "blink:Blink": {
+      "category": "preset",
+      "name": "Blink",
+      "presetName": "blink",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 13,
+          "morph_name": "Fcl_EYE_Close",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "blink_l:Blink_L": {
+      "category": "preset",
+      "name": "Blink_L",
+      "presetName": "blink_l",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 15,
+          "morph_name": "Fcl_EYE_Close_L",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "blink_r:Blink_R": {
+      "category": "preset",
+      "name": "Blink_R",
+      "presetName": "blink_r",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 14,
+          "morph_name": "Fcl_EYE_Close_R",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "angry:Angry": {
+      "category": "preset",
+      "name": "Angry",
+      "presetName": "angry",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 1,
+          "morph_name": "Fcl_ALL_Angry",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "fun:Fun": {
+      "category": "preset",
+      "name": "Fun",
+      "presetName": "fun",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 2,
+          "morph_name": "Fcl_ALL_Fun",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "joy:Joy": {
+      "category": "preset",
+      "name": "Joy",
+      "presetName": "joy",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 3,
+          "morph_name": "Fcl_ALL_Joy",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "sorrow:Sorrow": {
+      "category": "preset",
+      "name": "Sorrow",
+      "presetName": "sorrow",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 4,
+          "morph_name": "Fcl_ALL_Sorrow",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    },
+    "unknown:Surprised": {
+      "category": "preset",
+      "name": "Surprised",
+      "presetName": "unknown",
+      "binds": [
+        {
+          "mesh_index": 0,
+          "mesh_name": "Face (merged).baked",
+          "morph_index": 5,
+          "morph_name": "Fcl_ALL_Surprised",
+          "weight": 100.0,
+          "weight_percent": 100.0,
+          "normalized_weight": 1.0
+        }
+      ]
+    }
+  },
+  "morph_catalog": [
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morphs": [
+        {
+          "index": 0,
+          "name": "Fcl_ALL_Neutral"
+        },
+        {
+          "index": 1,
+          "name": "Fcl_ALL_Angry"
+        },
+        {
+          "index": 2,
+          "name": "Fcl_ALL_Fun"
+        },
+        {
+          "index": 3,
+          "name": "Fcl_ALL_Joy"
+        },
+        {
+          "index": 4,
+          "name": "Fcl_ALL_Sorrow"
+        },
+        {
+          "index": 5,
+          "name": "Fcl_ALL_Surprised"
+        },
+        {
+          "index": 6,
+          "name": "Fcl_BRW_Angry"
+        },
+        {
+          "index": 7,
+          "name": "Fcl_BRW_Fun"
+        },
+        {
+          "index": 8,
+          "name": "Fcl_BRW_Joy"
+        },
+        {
+          "index": 9,
+          "name": "Fcl_BRW_Sorrow"
+        },
+        {
+          "index": 10,
+          "name": "Fcl_BRW_Surprised"
+        },
+        {
+          "index": 11,
+          "name": "Fcl_EYE_Natural"
+        },
+        {
+          "index": 12,
+          "name": "Fcl_EYE_Angry"
+        },
+        {
+          "index": 13,
+          "name": "Fcl_EYE_Close"
+        },
+        {
+          "index": 14,
+          "name": "Fcl_EYE_Close_R"
+        },
+        {
+          "index": 15,
+          "name": "Fcl_EYE_Close_L"
+        },
+        {
+          "index": 16,
+          "name": "Fcl_EYE_Fun"
+        },
+        {
+          "index": 17,
+          "name": "Fcl_EYE_Joy"
+        },
+        {
+          "index": 18,
+          "name": "Fcl_EYE_Joy_R"
+        },
+        {
+          "index": 19,
+          "name": "Fcl_EYE_Joy_L"
+        },
+        {
+          "index": 20,
+          "name": "Fcl_EYE_Sorrow"
+        },
+        {
+          "index": 21,
+          "name": "Fcl_EYE_Surprised"
+        },
+        {
+          "index": 22,
+          "name": "Fcl_EYE_Spread"
+        },
+        {
+          "index": 23,
+          "name": "Fcl_EYE_Iris_Hide"
+        },
+        {
+          "index": 24,
+          "name": "Fcl_EYE_Highlight_Hide"
+        },
+        {
+          "index": 25,
+          "name": "Fcl_MTH_Close"
+        },
+        {
+          "index": 26,
+          "name": "Fcl_MTH_Up"
+        },
+        {
+          "index": 27,
+          "name": "Fcl_MTH_Down"
+        },
+        {
+          "index": 28,
+          "name": "Fcl_MTH_Angry"
+        },
+        {
+          "index": 29,
+          "name": "Fcl_MTH_Small"
+        },
+        {
+          "index": 30,
+          "name": "Fcl_MTH_Large"
+        },
+        {
+          "index": 31,
+          "name": "Fcl_MTH_Neutral"
+        },
+        {
+          "index": 32,
+          "name": "Fcl_MTH_Fun"
+        },
+        {
+          "index": 33,
+          "name": "Fcl_MTH_Joy"
+        },
+        {
+          "index": 34,
+          "name": "Fcl_MTH_Sorrow"
+        },
+        {
+          "index": 35,
+          "name": "Fcl_MTH_Surprised"
+        },
+        {
+          "index": 36,
+          "name": "Fcl_MTH_SkinFung"
+        },
+        {
+          "index": 37,
+          "name": "Fcl_MTH_SkinFung_R"
+        },
+        {
+          "index": 38,
+          "name": "Fcl_MTH_SkinFung_L"
+        },
+        {
+          "index": 39,
+          "name": "Fcl_MTH_A"
+        },
+        {
+          "index": 40,
+          "name": "Fcl_MTH_I"
+        },
+        {
+          "index": 41,
+          "name": "Fcl_MTH_U"
+        },
+        {
+          "index": 42,
+          "name": "Fcl_MTH_E"
+        },
+        {
+          "index": 43,
+          "name": "Fcl_MTH_O"
+        },
+        {
+          "index": 44,
+          "name": "Fcl_HA_Hide"
+        },
+        {
+          "index": 45,
+          "name": "Fcl_HA_Fung1"
+        },
+        {
+          "index": 46,
+          "name": "Fcl_HA_Fung1_Low"
+        },
+        {
+          "index": 47,
+          "name": "Fcl_HA_Fung1_Up"
+        },
+        {
+          "index": 48,
+          "name": "Fcl_HA_Fung2"
+        },
+        {
+          "index": 49,
+          "name": "Fcl_HA_Fung2_Low"
+        },
+        {
+          "index": 50,
+          "name": "Fcl_HA_Fung2_Up"
+        },
+        {
+          "index": 51,
+          "name": "Fcl_HA_Fung3"
+        },
+        {
+          "index": 52,
+          "name": "Fcl_HA_Fung3_Up"
+        },
+        {
+          "index": 53,
+          "name": "Fcl_HA_Fung3_Low"
+        },
+        {
+          "index": 54,
+          "name": "Fcl_HA_Short"
+        },
+        {
+          "index": 55,
+          "name": "Fcl_HA_Short_Up"
+        },
+        {
+          "index": 56,
+          "name": "Fcl_HA_Short_Low"
+        }
+      ]
+    }
+  ],
+  "morph_usage": [
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 0,
+      "morph_name": "Fcl_ALL_Neutral",
+      "used_by": [
+        {
+          "expression": "neutral:Neutral",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 39,
+      "morph_name": "Fcl_MTH_A",
+      "used_by": [
+        {
+          "expression": "a:A",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 40,
+      "morph_name": "Fcl_MTH_I",
+      "used_by": [
+        {
+          "expression": "i:I",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 41,
+      "morph_name": "Fcl_MTH_U",
+      "used_by": [
+        {
+          "expression": "u:U",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 42,
+      "morph_name": "Fcl_MTH_E",
+      "used_by": [
+        {
+          "expression": "e:E",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 43,
+      "morph_name": "Fcl_MTH_O",
+      "used_by": [
+        {
+          "expression": "o:O",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 13,
+      "morph_name": "Fcl_EYE_Close",
+      "used_by": [
+        {
+          "expression": "blink:Blink",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 15,
+      "morph_name": "Fcl_EYE_Close_L",
+      "used_by": [
+        {
+          "expression": "blink_l:Blink_L",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 14,
+      "morph_name": "Fcl_EYE_Close_R",
+      "used_by": [
+        {
+          "expression": "blink_r:Blink_R",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 1,
+      "morph_name": "Fcl_ALL_Angry",
+      "used_by": [
+        {
+          "expression": "angry:Angry",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 2,
+      "morph_name": "Fcl_ALL_Fun",
+      "used_by": [
+        {
+          "expression": "fun:Fun",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 3,
+      "morph_name": "Fcl_ALL_Joy",
+      "used_by": [
+        {
+          "expression": "joy:Joy",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 4,
+      "morph_name": "Fcl_ALL_Sorrow",
+      "used_by": [
+        {
+          "expression": "sorrow:Sorrow",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    },
+    {
+      "mesh_index": 0,
+      "mesh_name": "Face (merged).baked",
+      "morph_index": 5,
+      "morph_name": "Fcl_ALL_Surprised",
+      "used_by": [
+        {
+          "expression": "unknown:Surprised",
+          "weight": 100.0,
+          "weight_percent": 100.0
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "VRM 0.x weights are stored as percentages.",
+    "VRM 1.0 weights are stored in the 0..1 range.",
+    "The dump lists declared morph bindings, not measured runtime deformation."
+  ]
+}

@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VTuber — Dynamic JSON & Bone Control</title>
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      color: #f5f5fa;
+      background: #15151c;
+      font-family: Arial, sans-serif;
+    }
+    #viewport {
+      position: fixed;
+      inset: 0;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    #panel {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      width: min(390px, calc(100vw - 24px));
+      max-height: calc(100vh - 24px);
+      overflow-y: auto;
+      padding: 14px;
+      background: #191923f0;
+      border: 1px solid #424254;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    h2 { margin: 0 0 10px; font-size: 17px; }
+    .label { margin-top: 10px; color: #b7b7cc; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+    #status {
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: #2a2a38;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .meter {
+      height: 6px;
+      margin-top: 4px;
+      background: #363646;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .fill { height: 100%; width: 0%; background: #9283f6; transition: width 0.05s ease; }
+    .fill.pupil { background: #38ef7d; }
+    .fill.vowel { background: #ffaa40; }
+    #debug, #morphDebug {
+      margin-top: 6px;
+      padding: 6px;
+      background: #111118;
+      border-radius: 6px;
+      color: #7de89f;
+      font: 11px/1.4 monospace;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    button {
+      width: 100%;
+      margin-top: 8px;
+      padding: 9px;
+      color: white;
+      background: #5d4cb8;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background: #715fd6; }
+    button.secondary { background: #2f2f3d; font-weight: normal; }
+    button.secondary:hover { background: #3d3d4f; }
+  </style>
+
+  <!-- Importmap для автономной работы без сборщиков -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+      "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@2.1.2/lib/three-vrm.module.js"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <div id="viewport"></div>
+
+  <div id="panel">
+    <h2>VTuber Controller</h2>
+    <div id="status">Инициализация...</div>
+
+    <div class="label">Челюсть / Речь</div>
+    <div class="meter"><div id="meterJaw" class="fill vowel"></div></div>
+
+    <div class="label">Независимые каналы лица</div>
+    <div id="faceChannels" style="font-size:12px; line-height:1.5; margin-top:3px;">Брови · глаза · рот · веки</div>
+
+    <div class="label">Закрытие глаз (L / R)</div>
+    <div class="meter"><div id="meterBlinkL" class="fill"></div></div>
+    <div class="meter" style="margin-top:2px;"><div id="meterBlinkR" class="fill"></div></div>
+
+    <div class="label">Положение зрачков (X / Y)</div>
+    <div class="meter"><div id="meterPupilX" class="fill pupil"></div></div>
+    <div class="meter" style="margin-top:2px;"><div id="meterPupilY" class="fill pupil"></div></div>
+
+    <div class="label">Активные морфы меша (> 0.05)</div>
+    <div id="morphDebug">Ожидание...</div>
+
+    <div class="label">Системные логи</div>
+    <div id="debug">Загрузка JSON...</div>
+
+    <button id="btnReset">Сбросить всё в нейтраль</button>
+    <button id="btnReloadJson" class="secondary">Перезагрузить JSON файлы</button>
+  </div>
+
+<script type="module">
+
+
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+
+const $ = id => document.getElementById(id);
+
+// =====================================================
+// THREE.JS
+// =====================================================
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x15151c);
+
+const camera = new THREE.PerspectiveCamera(
+  24, innerWidth / innerHeight, 0.1, 100
+);
+camera.position.set(0, 1.55, 1.65);
+camera.lookAt(0, 1.58, 0);
+
+const renderer = new THREE.WebGLRenderer({
+  antialias: true,
+  alpha: false
+});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+$('viewport').appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x555566, 1.8));
+
+const dirLight = new THREE.DirectionalLight(0xffffff, 2.0);
+dirLight.position.set(1, 2.5, 3);
+scene.add(dirLight);
+
+// =====================================================
+// СОСТОЯНИЕ
+// =====================================================
+let avatar = null;
+let headBone = null;
+let leftEyeBone = null;
+let rightEyeBone = null;
+
+let headBaseRot = null;
+let leftEyeBaseRot = null;
+let rightEyeBaseRot = null;
+
+const morphMap = new Map();
+const morphTargetValues = new Map();
+const morphCurrentValues = new Map();
+
+const headTarget = { yaw: 0, pitch: 0, roll: 0 };
+const headCurrent = { yaw: 0, pitch: 0, roll: 0 };
+
+const pupilTarget = { x: 0, y: 0 };
+const pupilCurrent = { x: 0, y: 0 };
+
+let eyeGazeWeight = 1;
+
+let emotionTargetsJson = { states: {} };
+let faceCalibrationJson = {};
+
+// =====================================================
+// JSON
+// =====================================================
+async function fetchJsonConfig(path) {
+  const response = await fetch(path, { cache: 'no-store' });
+  const body = await response.text();
+
+  if (!response.ok) {
+    throw new Error(`${path}: HTTP ${response.status}`);
+  }
+
+  if (
+    body.trimStart().startsWith('<') ||
+    /text\/html/i.test(response.headers.get('content-type') || '')
+  ) {
+    throw new Error(`${path}: сервер вернул HTML вместо JSON`);
+  }
+
+  try {
+    return JSON.parse(body);
+  } catch (error) {
+    throw new Error(`${path}: ошибка JSON: ${error.message}`);
+  }
+}
+
+async function loadJsonConfigs() {
+  const messages = [];
+
+  try {
+    emotionTargetsJson =
+      await fetchJsonConfig('./facial_emotion_targets.json');
+    messages.push('facial_emotion_targets.json: OK');
+  } catch (error) {
+    emotionTargetsJson = { states: {} };
+    messages.push(`Предупреждение: ${error.message}`);
+  }
+
+  try {
+    faceCalibrationJson =
+      await fetchJsonConfig('./face_calibration.json');
+    messages.push('face_calibration.json: OK');
+  } catch (error) {
+    faceCalibrationJson = {};
+    messages.push(`Предупреждение: ${error.message}`);
+  }
+
+  $('debug').textContent = messages.join('\n');
+}
+
+// =====================================================
+// МОРФЫ
+// Одинаковые названия на разных мешах поддерживаются.
+// =====================================================
+function scanModelMorphs(vrm) {
+  morphMap.clear();
+  morphTargetValues.clear();
+  morphCurrentValues.clear();
+
+  vrm.scene.traverse(node => {
+    if (!node.isMesh || !node.morphTargetDictionary) return;
+
+    for (const [name, index] of Object.entries(
+      node.morphTargetDictionary
+    )) {
+      if (name.startsWith('Fcl_ALL_')) continue;
+
+      if (!morphMap.has(name)) morphMap.set(name, []);
+      morphMap.get(name).push({ mesh: node, index });
+
+      if (!morphTargetValues.has(name)) {
+        morphTargetValues.set(name, 0);
+        morphCurrentValues.set(name, 0);
+      }
+    }
+  });
+
+  console.log(`Найдено морфов: ${morphMap.size}`);
+}
+
+// =====================================================
+// ЗАГРУЗКА VRM
+// =====================================================
+const loader = new GLTFLoader();
+loader.register(parser => new VRMLoaderPlugin(parser));
+
+$('status').textContent = 'Загрузка BaseTest.vrm...';
+
+loader.load(
+  './BaseTest.vrm',
+  gltf => {
+    avatar = gltf.userData.vrm;
+    VRMUtils.rotateVRM0(avatar);
+    scene.add(avatar.scene);
+
+    const box = new THREE.Box3().setFromObject(avatar.scene);
+    const center = box.getCenter(new THREE.Vector3());
+
+    avatar.scene.position.x -= center.x;
+    avatar.scene.position.z -= center.z;
+    avatar.scene.position.y -= box.min.y;
+
+    const humanoid = avatar.humanoid;
+
+    if (humanoid) {
+      headBone = humanoid.getNormalizedBoneNode('head') || null;
+      leftEyeBone = humanoid.getNormalizedBoneNode('leftEye') || null;
+      rightEyeBone = humanoid.getNormalizedBoneNode('rightEye') || null;
+
+      if (headBone) headBaseRot = headBone.rotation.clone();
+      if (leftEyeBone) leftEyeBaseRot = leftEyeBone.rotation.clone();
+      if (rightEyeBone) rightEyeBaseRot = rightEyeBone.rotation.clone();
+    }
+
+    scanModelMorphs(avatar);
+    $('status').textContent = 'Модель загружена. Ожидание WebSocket.';
+  },
+  undefined,
+  error => {
+    console.error(error);
+    $('status').textContent = 'Ошибка загрузки BaseTest.vrm';
+  }
+);
+
+// =====================================================
+// ОБРАБОТКА ЛИЦА
+// Независимые каналы: брови, глаза, веки и рот.
+// =====================================================
+function applyFaceData(message) {
+  if (!avatar) return;
+
+  const face = message.face || {};
+  const head = message.head || {};
+  const states = emotionTargetsJson?.states || {};
+
+  const get = (...keys) => {
+    for (const key of keys) {
+      const value = Number(face[key]);
+      if (Number.isFinite(value)) {
+        return THREE.MathUtils.clamp(value, 0, 1);
+      }
+    }
+    return 0;
+  };
+
+  const setMorph = (name, value) => {
+    if (!morphTargetValues.has(name)) return;
+
+    morphTargetValues.set(
+      name,
+      Math.max(
+        morphTargetValues.get(name) || 0,
+        THREE.MathUtils.clamp(Number(value) || 0, 0, 1)
+      )
+    );
+  };
+
+  const setFirstExisting = (names, value) => {
+    for (const name of names) {
+      if (morphTargetValues.has(name)) {
+        setMorph(name, value);
+      }
+    }
+  };
+
+  // Голова
+  headTarget.yaw = (Number(head.yaw) || 0) * 0.8;
+  headTarget.pitch = (Number(head.pitch) || 0) * 0.6;
+  headTarget.roll = (Number(head.roll) || 0) * 0.5;
+
+  // -----------------------------------------------------
+  // ВЗГЛЯД
+  // Умеренное усиление, плавное движение задаётся в animate().
+  // -----------------------------------------------------
+  const lookLeftH =
+    get('eyeLookOutLeft') - get('eyeLookInLeft');
+  const lookRightH =
+    get('eyeLookInRight') - get('eyeLookOutRight');
+
+  const lookLeftV =
+    get('eyeLookUpLeft') - get('eyeLookDownLeft');
+  const lookRightV =
+    get('eyeLookUpRight') - get('eyeLookDownRight');
+
+  pupilTarget.x = THREE.MathUtils.clamp(
+    (lookLeftH + lookRightH) * 0.85,
+    -1, 1
+  );
+
+  pupilTarget.y = THREE.MathUtils.clamp(
+    (lookLeftV + lookRightV) * 0.85,
+    -1, 1
+  );
+
+  $('meterPupilX').style.width =
+    `${((pupilTarget.x + 1) / 2) * 100}%`;
+  $('meterPupilY').style.width =
+    `${((pupilTarget.y + 1) / 2) * 100}%`;
+
+  // Сброс целевых значений перед сборкой независимых каналов.
+  for (const name of morphTargetValues.keys()) {
+    morphTargetValues.set(name, 0);
+  }
+
+  // -----------------------------------------------------
+  // 1. БРОВИ
+  // -----------------------------------------------------
+  const browDownL = get('browDownLeft');
+  const browDownR = get('browDownRight');
+  const browInner = get('browInnerUp');
+  const browOuterL = get('browOuterUpLeft');
+  const browOuterR = get('browOuterUpRight');
+
+  setFirstExisting(
+    ['Fcl_BRW_Angry', 'Fcl_BRW_Angry_L'],
+    browDownL
+  );
+  setFirstExisting(
+    ['Fcl_BRW_Angry', 'Fcl_BRW_Angry_R'],
+    browDownR
+  );
+  setFirstExisting(
+    ['Fcl_BRW_Sorrow', 'Fcl_BRW_Sorrow_L'],
+    browInner
+  );
+  setFirstExisting(
+    ['Fcl_BRW_Surprised', 'Fcl_BRW_Surprise'],
+    Math.max(browOuterL, browOuterR, browInner)
+  );
+
+  // -----------------------------------------------------
+  // 2. ВЕКИ И МОРГАНИЕ
+  // -----------------------------------------------------
+  const calibration = faceCalibrationJson || {};
+
+  const neutralBlink = Number(
+    calibration.neutralBlink ??
+    calibration.eyeBlinkNeutral ??
+    0.15
+  );
+
+  const closedBlink = Number(
+    calibration.closedBlink ??
+    calibration.eyeBlinkClosed ??
+    0.60
+  );
+
+  const blinkL = THREE.MathUtils.clamp(
+    (get('eyeBlinkLeft') - neutralBlink) /
+    Math.max(0.01, closedBlink - neutralBlink),
+    0, 1
+  );
+
+  const blinkR = THREE.MathUtils.clamp(
+    (get('eyeBlinkRight') - neutralBlink) /
+    Math.max(0.01, closedBlink - neutralBlink),
+    0, 1
+  );
+
+  $('meterBlinkL').style.width = `${blinkL * 100}%`;
+  $('meterBlinkR').style.width = `${blinkR * 100}%`;
+
+  // При закрытии глаз взгляд плавно возвращается к центру.
+  eyeGazeWeight = 1 - Math.max(blinkL, blinkR);
+
+  if (
+    Math.abs(blinkL - blinkR) < 0.2 &&
+    Math.max(blinkL, blinkR) > 0.08
+  ) {
+    setFirstExisting(
+      ['Fcl_EYE_Close', 'Fcl_EYE_Blink'],
+      (blinkL + blinkR) / 2
+    );
+  } else {
+    setFirstExisting(
+      ['Fcl_EYE_Close_L', 'Fcl_EYE_Blink_L'],
+      blinkL
+    );
+    setFirstExisting(
+      ['Fcl_EYE_Close_R', 'Fcl_EYE_Blink_R'],
+      blinkR
+    );
+  }
+
+  // -----------------------------------------------------
+  // 3. ФОРМА ГЛАЗ
+  // -----------------------------------------------------
+  const squint = Math.max(
+    get('eyeSquintLeft'),
+    get('eyeSquintRight')
+  );
+
+  const wide = Math.max(
+    get('eyeWideLeft'),
+    get('eyeWideRight')
+  );
+
+  setFirstExisting(['Fcl_EYE_Joy', 'Fcl_EYE_Fun'], squint);
+  setFirstExisting(
+    ['Fcl_EYE_Surprised', 'Fcl_EYE_Surprise'],
+    wide
+  );
+  setFirstExisting(
+    ['Fcl_EYE_Angry'],
+    Math.max(browDownL, browDownR) * 0.5
+  );
+  setFirstExisting(['Fcl_EYE_Sorrow'], browInner * 0.5);
+
+  // -----------------------------------------------------
+  // 4. РОТ
+  // Сохраняется независимая работа всех каналов.
+  // Исправлено только ложное появление буквы У.
+  // -----------------------------------------------------
+  const smileL = get('mouthSmileLeft');
+  const smileR = get('mouthSmileRight');
+  const smile = Math.max(smileL, smileR);
+
+  const frown = Math.max(
+    get('mouthFrownLeft'),
+    get('mouthFrownRight')
+  );
+
+  const pucker = get('mouthPucker');
+  const funnel = get('mouthFunnel');
+
+  const jawRaw = get('jawOpen');
+
+  // Повышенная чувствительность рта:
+  // слабое открытие челюсти заметнее отображается.
+  const jawOpen = THREE.MathUtils.clamp(jawRaw * 1.5, 0, 1);
+
+  $('meterJaw').style.width = `${jawOpen * 100}%`;
+
+  setFirstExisting(
+    ['Fcl_MTH_Smile', 'Fcl_MTH_Fun', 'Fcl_MTH_Joy'],
+    smile
+  );
+  setFirstExisting(['Fcl_MTH_Sorrow'], frown);
+
+  // КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ:
+  // «У» не активируется одним шумовым сигналом mouthPucker,
+  // когда челюсть закрыта.
+  const mouthOpenForU = jawRaw > 0.10;
+  const validPucker = pucker > 0.18;
+
+  if (mouthOpenForU && validPucker) {
+    setFirstExisting(
+      ['Fcl_MTH_U'],
+      THREE.MathUtils.clamp((pucker - 0.12) * 1.35, 0, 1)
+    );
+  }
+
+  // «О» остаётся отдельным каналом.
+  // Небольшой funnel без открытия рта не активирует его.
+  if (jawRaw > 0.10) {
+    setFirstExisting(
+      ['Fcl_MTH_O'],
+      Math.max(funnel, pucker * 0.65)
+    );
+  }
+
+  setFirstExisting(['Fcl_MTH_A'], jawOpen);
+
+  // Индивидуальные морфы левой и правой сторон рта.
+  setFirstExisting(
+    ['Fcl_MTH_Smile_L', 'Fcl_MTH_SmileLeft'],
+    smileL
+  );
+  setFirstExisting(
+    ['Fcl_MTH_Smile_R', 'Fcl_MTH_SmileRight'],
+    smileR
+  );
+  setFirstExisting(
+    ['Fcl_MTH_Frown_L', 'Fcl_MTH_FrownLeft'],
+    get('mouthFrownLeft')
+  );
+  setFirstExisting(
+    ['Fcl_MTH_Frown_R', 'Fcl_MTH_FrownRight'],
+    get('mouthFrownRight')
+  );
+
+  // -----------------------------------------------------
+  // 5. РЕЦЕПТЫ JSON ПО ЗОНАМ
+  // Не выбирается одна общая эмоция.
+  // -----------------------------------------------------
+  const squintWeight = squint;
+  const browSadWeight = Math.max(browInner, frown);
+
+  const recipes = [
+    {
+      keys: ['smile', 'happy', 'joy'],
+      weight: smile,
+      zone: 'mouth'
+    },
+    {
+      keys: ['joy', 'happy'],
+      weight: squintWeight,
+      zone: 'eye'
+    },
+    {
+      keys: ['sadness', 'sad', 'sorrow'],
+      weight: browSadWeight,
+      zone: 'brow'
+    },
+    {
+      keys: ['anger', 'angry'],
+      weight: Math.max(browDownL, browDownR),
+      zone: 'brow'
+    },
+    {
+      keys: ['surprise', 'surprised'],
+      weight: Math.max(wide, browOuterL, browOuterR),
+      zone: 'eye'
+    }
+  ];
+
+  for (const item of recipes) {
+    const key = item.keys.find(
+      k => states[k] && typeof states[k] === 'object'
+    );
+
+    if (!key || item.weight <= 0) continue;
+
+    for (const [morphName, percentRaw] of Object.entries(states[key])) {
+      const percent = Number(percentRaw);
+      if (!Number.isFinite(percent)) continue;
+
+      const isBrow = morphName.startsWith('Fcl_BRW_');
+      const isEye =
+        morphName.startsWith('Fcl_EYE_') &&
+        !morphName.includes('Close') &&
+        !morphName.includes('Blink');
+      const isMouth = morphName.startsWith('Fcl_MTH_');
+
+      const belongsToZone =
+        (item.zone === 'brow' && isBrow) ||
+        (item.zone === 'eye' && isEye) ||
+        (item.zone === 'mouth' && isMouth);
+
+      if (belongsToZone) {
+        setMorph(morphName, (percent / 100) * item.weight);
+      }
+    }
+  }
+
+  const channels = $('faceChannels');
+  if (channels) {
+    channels.textContent =
+      `Брови ${Math.max(browDownL, browDownR, browInner).toFixed(2)} · ` +
+      `глаза ${Math.max(squint, wide).toFixed(2)} · ` +
+      `рот ${Math.max(smile, frown, jawOpen).toFixed(2)} · ` +
+      `веки L ${blinkL.toFixed(2)} / R ${blinkR.toFixed(2)}`;
+  }
+}
+
+// =====================================================
+// АНИМАЦИЯ
+// =====================================================
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const faceAlpha = 1 - Math.exp(-dt * 15);
+  const headAlpha = 1 - Math.exp(-dt * 10);
+
+  // Медленнее сглаживаем взгляд, чтобы убрать дёргание.
+  const eyeAlpha = 1 - Math.exp(-dt * 7);
+
+  if (avatar) avatar.update(dt);
+
+  // Голова
+  if (headBone && headBaseRot) {
+    headCurrent.yaw = THREE.MathUtils.lerp(
+      headCurrent.yaw, headTarget.yaw, headAlpha
+    );
+    headCurrent.pitch = THREE.MathUtils.lerp(
+      headCurrent.pitch, headTarget.pitch, headAlpha
+    );
+    headCurrent.roll = THREE.MathUtils.lerp(
+      headCurrent.roll, headTarget.roll, headAlpha
+    );
+
+    headBone.rotation.set(
+      headBaseRot.x + headCurrent.pitch,
+      headBaseRot.y + headCurrent.yaw,
+      headBaseRot.z + headCurrent.roll
+    );
+  }
+
+  // Глаза: умеренная амплитуда и ограничение скорости изменения.
+  pupilCurrent.x = THREE.MathUtils.lerp(
+    pupilCurrent.x, pupilTarget.x, eyeAlpha
+  );
+  pupilCurrent.y = THREE.MathUtils.lerp(
+    pupilCurrent.y, pupilTarget.y, eyeAlpha
+  );
+
+  // Около 10 градусов максимального отклонения.
+  const maxEyeAngle = 0.30;
+  const eyeYaw = pupilCurrent.x * maxEyeAngle * eyeGazeWeight;
+  const eyePitch = pupilCurrent.y * maxEyeAngle * eyeGazeWeight;
+
+  if (leftEyeBone && leftEyeBaseRot) {
+    leftEyeBone.rotation.set(
+      leftEyeBaseRot.x + eyePitch,
+      leftEyeBaseRot.y + eyeYaw,
+      leftEyeBaseRot.z
+    );
+  }
+
+  if (rightEyeBone && rightEyeBaseRot) {
+    rightEyeBone.rotation.set(
+      rightEyeBaseRot.x + eyePitch,
+      rightEyeBaseRot.y + eyeYaw,
+      rightEyeBaseRot.z
+    );
+  }
+
+  // Морфы применяются после avatar.update().
+  const activeMorphs = [];
+
+  for (const [name, target] of morphTargetValues) {
+    const current = morphCurrentValues.get(name) ?? 0;
+    const next = THREE.MathUtils.lerp(current, target, faceAlpha);
+
+    morphCurrentValues.set(name, next);
+
+    const bindings = morphMap.get(name);
+
+    if (bindings) {
+      for (const binding of bindings) {
+        binding.mesh.morphTargetInfluences[binding.index] = next;
+      }
+
+      if (next > 0.05) {
+        activeMorphs.push(`${name}: ${next.toFixed(2)}`);
+      }
+    }
+  }
+
+  $('morphDebug').textContent = activeMorphs.length
+    ? activeMorphs.join('\n')
+    : 'Все морфы <= 0.05';
+
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// =====================================================
+// WEBSOCKET
+// =====================================================
+let ws = null;
+
+function connectWS() {
+  ws = new WebSocket('ws://127.0.0.1:8765');
+
+  ws.onopen = () => {
+    $('status').textContent =
+      'WebSocket подключен (ws://127.0.0.1:8765)';
+  };
+
+  ws.onmessage = event => {
+    try {
+      const message = JSON.parse(event.data);
+
+      if (message.type === 'face') {
+        applyFaceData(message);
+      }
+    } catch (error) {
+      console.error('Ошибка обработки WebSocket:', error);
+    }
+  };
+
+  ws.onclose = () => {
+    $('status').textContent =
+      'Связь потеряна. Переподключение через 2 сек...';
+    setTimeout(connectWS, 2000);
+  };
+
+  ws.onerror = () => ws.close();
+}
+
+// =====================================================
+// ИНИЦИАЛИЗАЦИЯ И КНОПКИ
+// =====================================================
+loadJsonConfigs().then(connectWS);
+
+$('btnReloadJson').onclick = async () => {
+  await loadJsonConfigs();
+  alert('Загрузка JSON завершена. Проверьте системные логи.');
+};
+
+$('btnReset').onclick = () => {
+  headTarget.yaw = 0;
+  headTarget.pitch = 0;
+  headTarget.roll = 0;
+
+  pupilTarget.x = 0;
+  pupilTarget.y = 0;
+
+  for (const key of morphTargetValues.keys()) {
+    morphTargetValues.set(key, 0);
+  }
+};
+
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+</script>
+</body>
+</html>
